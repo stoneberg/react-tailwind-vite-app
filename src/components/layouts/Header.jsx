@@ -23,6 +23,11 @@ const Header = () => {
                 Contact
               </Link>
             </li>
+            <li>
+              <Link className="text-2xl" to="schedule">
+                Schedule
+              </Link>
+            </li>
           </ul>
         </nav>
       </header>
