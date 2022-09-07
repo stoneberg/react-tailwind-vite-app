@@ -1,73 +1,88 @@
-import React, { useState } from "react";
+import React, { forwardRef, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
-import styled, { css } from "styled-components";
-import { addDays, addMonths, format, subDays } from "date-fns";
+import styled from "styled-components";
+import { format, subMonths, subWeeks } from "date-fns";
 import { ko } from "date-fns/esm/locale";
 import "react-datepicker/dist/react-datepicker.css";
+import { FiCalendar } from "react-icons/fi";
 
 const CustomDatePicker = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
+  const IconInput = forwardRef(({ value, onClick }, ref) => (
+    /*    <button className="btn btn-success" onClick={onClick} ref={ref}>
+      {value}
+    </button>*/
+    <div className="ml-2">
+      <FiCalendar size={40} onClick={onClick} ref={ref} />
+    </div>
+  ));
+
   const handleAddDays = (days) => {
     console.log("add days");
     if (days === "1w") {
-      setStartDate((preDate) => addDays(preDate, 6));
-      setEndDate((preDate) => addDays(preDate, 6));
+      setStartDate(() => subWeeks(new Date(), 1));
+      setEndDate(new Date());
     } else if (days === "1m") {
-      setStartDate((preDate) => addMonths(preDate, 1));
-      setEndDate((preDate) => addMonths(preDate, 1));
+      setStartDate(() => subMonths(new Date(), 1));
+      setEndDate(new Date());
     } else {
-      setStartDate((preDate) => addMonths(preDate, 3)); // 3m
-      setEndDate((preDate) => addMonths(preDate, 3));
+      setStartDate(() => subMonths(new Date(), 3)); // 3m
+      setEndDate(new Date());
     }
   };
 
   return (
     <>
-      <div>
+      <div className="mx-auto">
         <h1>프로젝트 시작일:</h1>
-        <input
-          type="text"
-          readOnly={true}
-          value={format(startDate, "yyyy-MM-dd")}
-          className="shadow appearance-none border rounded py-2 px-3 text-grey-darker"
-        />
-        <DatePickerWrapper
-          dateFormat="yyyy-MM-dd"
-          selected={startDate}
-          locale={ko}
-          onChange={(date) => setStartDate(date)}
-          startDate={startDate}
-          endDate={endDate}
-          /*minDate={subDays(new Date(), 5)}*/
-          minDate={new Date()}
-        />
+        <div className="flex justify-center">
+          <input
+            type="text"
+            readOnly={true}
+            value={format(startDate, "yyyy-MM-dd")}
+            className="shadow appearance-none border rounded py-2 px-3 mb-4 text-grey-darker"
+          />
+          <DatePickerWrapper
+            dateFormat="yyyy-MM-dd"
+            selected={startDate}
+            locale={ko}
+            onChange={(date) => setStartDate(date)}
+            startDate={startDate}
+            endDate={endDate}
+            maxDate={new Date()}
+            customInput={<IconInput />}
+          />
+        </div>
         <h1>프로젝트 종료일:</h1>
-        <input
-          type="text"
-          readOnly={true}
-          value={format(endDate, "yyyy-MM-dd")}
-          className="shadow appearance-none border rounded py-2 px-3 text-grey-darker"
-        />
-        <DatePickerWrapper
-          dateFormat="yyyy-MM-dd"
-          selected={endDate}
-          locale={ko}
-          onChange={(date) => setEndDate(date)}
-          startDate={startDate}
-          endDate={endDate}
-          minDate={startDate}
-        />
+        <div className="flex justify-center">
+          <input
+            type="text"
+            readOnly={true}
+            value={format(endDate, "yyyy-MM-dd")}
+            className="shadow appearance-none border rounded py-2 px-3 mb-4 text-grey-darker"
+          />
+          <DatePickerWrapper
+            dateFormat="yyyy-MM-dd"
+            selected={endDate}
+            locale={ko}
+            onChange={(date) => setEndDate(date)}
+            startDate={startDate}
+            endDate={endDate}
+            minDate={startDate}
+            customInput={<IconInput />}
+          />
+        </div>
       </div>
       <button
-        className="btn btn-primary mr-2"
+        className="btn btn-primary mr-4 mt-4"
         onClick={() => handleAddDays("1w")}
       >
         1주일
       </button>
       <button
-        className="btn btn-primary mr-2"
+        className="btn btn-primary mr-4 mt-4"
         onClick={() => handleAddDays("1m")}
       >
         1개월
