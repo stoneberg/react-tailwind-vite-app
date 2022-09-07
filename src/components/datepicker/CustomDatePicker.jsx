@@ -9,13 +9,14 @@ import { FiCalendar } from "react-icons/fi";
 const CustomDatePicker = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const ref = useRef();
 
   const IconInput = forwardRef(({ value, onClick }, ref) => (
     /*    <button className="btn btn-success" onClick={onClick} ref={ref}>
       {value}
     </button>*/
-    <div className="ml-2">
-      <FiCalendar size={40} onClick={onClick} ref={ref} />
+    <div className="ml-2" onClick={onClick} ref={ref}>
+      <FiCalendar size={40} />
     </div>
   ));
 
