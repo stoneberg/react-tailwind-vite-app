@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useState } from "react";
+import React, { forwardRef, useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import styled from "styled-components";
 import { format, subMonths, subWeeks } from "date-fns";
@@ -6,19 +6,32 @@ import { ko } from "date-fns/esm/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import { FiCalendar } from "react-icons/fi";
 
+const IconInput = forwardRef(({ value, onClick }, ref) => (
+  /*    <button className="btn btn-success" onClick={onClick} ref={ref}>
+    {value}
+  </button>*/
+  <div className="ml-2" onClick={onClick} ref={ref}>
+    <FiCalendar size={40} />
+  </div>
+));
+
 const CustomDatePicker = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const ref = useRef();
+  const [holiday, setHoliday] = useState({});
 
-  const IconInput = forwardRef(({ value, onClick }, ref) => (
-    /*    <button className="btn btn-success" onClick={onClick} ref={ref}>
-      {value}
-    </button>*/
-    <div className="ml-2" onClick={onClick} ref={ref}>
-      <FiCalendar size={40} />
-    </div>
-  ));
+  useEffect(() => {
+    fetch("holiday.json")
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then((json) => {
+        console.log("holiday", json);
+        setHoliday(json);
+      });
+  }, []);
 
   const handleAddDays = (days) => {
     console.log("add days");
@@ -54,6 +67,14 @@ const CustomDatePicker = () => {
             endDate={endDate}
             maxDate={new Date()}
             customInput={<IconInput />}
+            className="mx-auto"
+            tileClassName={({ date, view }) => {
+              console.log("date>>", date);
+              console.log("holiday>>", holiday);
+              if (holiday?.find((x) => x === format(date, "yyyy-MM-dd"))) {
+                return "bg-red-500 text-white rounded-full hover:bg-red-600";
+              }
+            }}
           />
         </div>
         <h1>프로젝트 종료일:</h1>
