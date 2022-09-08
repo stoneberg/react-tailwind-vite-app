@@ -1,9 +1,9 @@
 import React, { forwardRef, useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import styled from "styled-components";
-import { format, subMonths, subWeeks } from "date-fns";
+import { format, getDay, subMonths, subWeeks } from "date-fns";
 import { ko } from "date-fns/esm/locale";
-import "react-datepicker/dist/react-datepicker.css";
+import "../../assets/css/react-datepicker.css";
 import { FiCalendar } from "react-icons/fi";
 
 const IconInput = forwardRef(({ value, onClick }, ref) => (
@@ -47,54 +47,60 @@ const CustomDatePicker = () => {
     }
   };
 
+  const isWeekday = (date) => {
+    const disableDay = format(date, "yyyy-MM-dd");
+    console.log("filter disableDay", disableDay);
+    const day = getDay(date);
+    return day !== 0 && day !== 6;
+  };
+
   return (
     <>
-      <div className="mx-auto">
-        <h1>프로젝트 시작일:</h1>
-        <div className="flex justify-center">
-          <input
-            type="text"
-            readOnly={true}
-            value={format(startDate, "yyyy-MM-dd")}
-            className="shadow appearance-none border rounded py-2 px-3 mb-4 text-grey-darker"
-          />
-          <DatePickerWrapper
-            dateFormat="yyyy-MM-dd"
-            selected={startDate}
-            locale={ko}
-            onChange={(date) => setStartDate(date)}
-            startDate={startDate}
-            endDate={endDate}
-            maxDate={new Date()}
-            customInput={<IconInput />}
-            className="mx-auto"
-            tileClassName={({ date, view }) => {
-              console.log("date>>", date);
-              console.log("holiday>>", holiday);
-              if (holiday?.find((x) => x === format(date, "yyyy-MM-dd"))) {
-                return "bg-red-500 text-white rounded-full hover:bg-red-600";
-              }
-            }}
-          />
+      <div className="flex justify-center space-x-20">
+        <div>
+          <h1>프로젝트 시작일:</h1>
+          <div className="flex justify-center">
+            <input
+              type="text"
+              readOnly={true}
+              value={format(startDate, "yyyy-MM-dd")}
+              className="shadow appearance-none border rounded py-2 px-3 mb-4 text-grey-darker"
+            />
+            <DatePicker
+              dateFormat="yyyy-MM-dd"
+              selected={startDate}
+              locale={ko}
+              onChange={(date) => setStartDate(date)}
+              startDate={startDate}
+              endDate={endDate}
+              maxDate={new Date()}
+              customInput={<IconInput />}
+              disabledKeyboardNavigation
+              filterDate={isWeekday}
+            />
+          </div>
         </div>
-        <h1>프로젝트 종료일:</h1>
-        <div className="flex justify-center">
-          <input
-            type="text"
-            readOnly={true}
-            value={format(endDate, "yyyy-MM-dd")}
-            className="shadow appearance-none border rounded py-2 px-3 mb-4 text-grey-darker"
-          />
-          <DatePickerWrapper
-            dateFormat="yyyy-MM-dd"
-            selected={endDate}
-            locale={ko}
-            onChange={(date) => setEndDate(date)}
-            startDate={startDate}
-            endDate={endDate}
-            minDate={startDate}
-            customInput={<IconInput />}
-          />
+        <div>
+          <h1>프로젝트 종료일:</h1>
+          <div className="flex justify-center">
+            <input
+              type="text"
+              readOnly={true}
+              value={format(endDate, "yyyy-MM-dd")}
+              className="shadow appearance-none border rounded py-2 px-3 mb-4 text-grey-darker"
+            />
+            <DatePicker
+              dateFormat="yyyy-MM-dd"
+              selected={endDate}
+              locale={ko}
+              onChange={(date) => setEndDate(date)}
+              startDate={startDate}
+              endDate={endDate}
+              minDate={startDate}
+              customInput={<IconInput />}
+              disabledKeyboardNavigation
+            />
+          </div>
         </div>
       </div>
       <button
