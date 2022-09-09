@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const SideBar = () => {
-  const [dropdown, setDropdown] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <>
-      <aside className="bg-green-300 md:w-1/3 lg:w-1/4 px-5 py-40">
+      <aside className="bg-green-300 w-64 px-5 py-40">
         <h1 className="text-2xl md:text-4xl mb-4">Sidebar</h1>
         <ul className="space-y-2">
           <li>
@@ -33,7 +33,7 @@ const SideBar = () => {
               className="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               aria-controls="dropdown-example"
               data-collapse-toggle="dropdown-example"
-              onClick={() => setDropdown((prev) => !prev)}
+              onClick={() => setOpen((prev) => !prev)}
             >
               <svg
                 aria-hidden="true"
@@ -70,7 +70,7 @@ const SideBar = () => {
             </button>
             <ul
               id="dropdown-example"
-              className={`py-2 space-y-2 ${(!dropdown && "hidden") || ""}`}
+              className={`py-2 space-y-2 ${(!open && "hidden") || ""}`}
             >
               <li>
                 <Link

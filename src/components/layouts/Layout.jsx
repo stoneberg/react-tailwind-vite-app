@@ -1,21 +1,25 @@
 import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import SideBar from "./SideBar";
-import { Outlet } from "react-router-dom";
+import Main from "./Main";
+// import SideBar from "./SideBar";
+import SideNavbar from "./SideNavbar";
+
+// tailwind layout container with header, footer, sidebar, and main content full height and width
 
 const Layout = () => {
   return (
-    <div className="container p-2 mx-auto">
-      <Header />
-      <div className="bg-white my-5 w-full flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
-        <SideBar />
-        <main className="bg-sky-300 md:w-2/3 lg:w-3/4 px-5 py-40">
-          <Outlet />
-        </main>
+    <>
+      <div className="flex flex-col h-screen">
+        <Header />
+        <div className="flex flex-row flex-grow">
+          {/* <SideBar /> */}
+          <SideNavbar />
+          <Main />
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </>
   );
 };
 
